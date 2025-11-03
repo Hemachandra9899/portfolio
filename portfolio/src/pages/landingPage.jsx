@@ -3,7 +3,7 @@ import sparkIcon from "../assets/si.svg";
 import { Header } from "../pages/Header.jsx";
 
 // Change this to your backend endpoint
-const BACKEND_URL = "https://backend-portfolio-o7oq.onrender.com/api/getnotes";
+const BACKEND_URL = "https://portfolio-bacckend.onrender.com/api/getnotes";
 
 export const LandingPage = () => {
   const [messages, setMessages] = useState([
