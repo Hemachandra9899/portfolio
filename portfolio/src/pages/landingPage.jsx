@@ -97,11 +97,11 @@ export const LandingPage = () => {
       {/* Hero Section */}
       <section className="px-10 md:px-16 pt-16 md:pt-24 pb-40">
         <div className="max-w-5xl space-y-6">
-          <h1 className="text-[37px] md:text-[50px] leading-[1.15] text-white font-light">
+          <h1 className="text-[30px] md:text-[50px] leading-[1.15] text-white font-light">
             Hemachandra Reddy
           </h1>
 
-          <p className="text-[23px] md:text-[33px] leading-relaxed font-light text-white/60">
+          <p className="text-[22px] md:text-[33px] leading-relaxed font-light text-white/60">
             <span>I design and build empathetic software experiences</span>
             <span className="block">
               that are grounded in research, informed by real users,
