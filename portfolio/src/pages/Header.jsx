@@ -79,7 +79,10 @@ export const Header = () => {
       >
         {/* Top row: title + close */}
         <div className="flex items-center justify-between px-10 md:px-16 pt-10 text-xs md:text-sm tracking-[0.4em] uppercase text-gray-300">
-          <span>My Index</span>
+          <span><Link to="/">
+        <span className="text-sm md:text-base font-semibold text-zinc-100">
+          HC
+        </span></Link></span>
           <button
             onClick={() => setIsMenuOpen(false)}
             className="
