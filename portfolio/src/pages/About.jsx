@@ -5,7 +5,8 @@ export const Profile = () => {
     <div
       className="min-h-screen bg-black text-white"
       style={{
-        fontFamily: '"Source Serif Pro", system-ui, -apple-system, "Helvetica Neue", serif',
+        fontFamily:
+          '"Source Serif Pro", system-ui, -apple-system, "Helvetica Neue", serif',
         fontWeight: 300,
       }}
     >
@@ -15,24 +16,25 @@ export const Profile = () => {
         {/* INTRO SECTION */}
         <section className="space-y-20 px-4 md:px-10 lg:px-16">
           <p className="text-3xl md:text-[3.3rem] leading-tight font-light">
-            Hemachandra Reddy is an entry-level software developer passionate
-            about building scalable, reliable, and high-performance systems.
-            He’s skilled in full-stack development, backend services, and test
-            automation—bringing strong problem-solving and debugging skills to
-            every project.
+            I’m an entry-level software developer passionate about building
+            scalable, reliable, and high-performance systems. I’m comfortable
+            across the stack and enjoy working on backend services, full-stack
+            features, and test automation—bringing strong problem-solving and
+            debugging skills to every project I work on.
           </p>
 
           <p className="text-3xl md:text-[3.3rem] leading-tight md:ml-32 lg:ml-48 max-w-6xl font-light">
-            He has experience designing REST APIs, managing databases, and
+            I have experience designing REST APIs, managing databases, and
             working with microservice architectures using Rust, Node.js, and
-            Express.js. His work spans backend systems, data streaming pipelines,
+            Express.js. My work spans backend systems, data streaming pipelines,
             and responsive front-end interfaces built with React and Tailwind CSS.
           </p>
 
           <p className="text-3xl md:text-[3.3rem] leading-tight md:ml-32 lg:ml-48 max-w-6xl font-light">
-            Based in Hyderabad, India, Hemachandra is interested in crafting
+            I’m based in Hyderabad, India, and I care about crafting
             well-designed products, efficient backend architectures, and
-            AI-driven workflows that enhance how people interact with technology.
+            AI-driven workflows that make technology feel more intuitive and
+            helpful for people.
           </p>
         </section>
 
@@ -104,7 +106,9 @@ export const Profile = () => {
             </h3>
             <ul className="space-y-3 text-zinc-300">
               <li>
-                <span className="font-medium text-white">SecondBrain (AI/Full-Stack Developer)</span>
+                <span className="font-medium text-white">
+                  SecondBrain (AI/Full-Stack Developer)
+                </span>
                 <p>
                   Built a personal AI assistant using RAG with open-source
                   transformers and Pinecone vector DB. Developed frontend in React
@@ -160,5 +164,3 @@ export const Profile = () => {
     </div>
   );
 };
-
-

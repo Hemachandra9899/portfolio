@@ -48,7 +48,6 @@ export const LandingPage = () => {
         throw new Error("Request failed");
       }
 
-      // Backend might return text/plain or JSON
       const contentType = res.headers.get("content-type") || "";
       let botText;
 
@@ -86,6 +85,19 @@ export const LandingPage = () => {
     }
   };
 
+  // 👇 New: make sure input is visible on small screens when keyboard opens
+  const handleInputFocus = () => {
+    if (!isChatOpen) setIsChatOpen(true);
+
+    // Give the keyboard a moment to appear, then scroll
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth",
+      });
+    }, 150);
+  };
+
   return (
     <div
       className="relative min-h-screen bg-black text-gray-100 overflow-hidden"
@@ -97,11 +109,11 @@ export const LandingPage = () => {
       {/* Hero Section */}
       <section className="px-10 md:px-16 pt-16 md:pt-24 pb-40">
         <div className="max-w-5xl space-y-6">
-          <h1 className="text-[50px] leading-[1.15] text-white font-light">
+          <h1 className="text-[37px] md:text-[50px] leading-[1.15] text-white font-light">
             Hemachandra Reddy
           </h1>
 
-          <p className="text-[25px] md:text-[33px] leading-relaxed font-light text-white/60">
+          <p className="text-[23px] md:text-[33px] leading-relaxed font-light text-white/60">
             <span>I design and build empathetic software experiences</span>
             <span className="block">
               that are grounded in research, informed by real users,
@@ -169,28 +181,26 @@ export const LandingPage = () => {
 
                   {/* Modern loading / "thinking" bubble */}
                   {isLoading && (
-  <div className="flex justify-start">
-    <div className="max-w-xl rounded-3xl px-7 py-4 bg-[#181818] text-gray-100 flex items-center gap-4 border border-gray-700/70 shadow-lg shadow-blue-900/40">
-      <span className="text-lg md:text-2xl">
-        Thinking…
-      </span>
-      <div className="flex items-end gap-1.5">
-        <span
-          className="w-1.5 h-3 rounded-full bg-gray-400 animate-pulse"
-          style={{ animationDelay: "0ms" }}
-        />
-        <span
-          className="w-1.5 h-5 rounded-full bg-gray-500 animate-pulse"
-          style={{ animationDelay: "120ms" }}
-        />
-        <span
-          className="w-1.5 h-3 rounded-full bg-gray-600 animate-pulse"
-          style={{ animationDelay: "240ms" }}
-        />
-      </div>
-    </div>
-  </div>
-)}
+                    <div className="flex justify-start">
+                      <div className="max-w-xl rounded-3xl px-7 py-4 bg-[#181818] text-gray-100 flex items-center gap-4 border border-gray-700/70 shadow-lg shadow-blue-900/40">
+                        <span className="text-lg md:text-2xl">Thinking…</span>
+                        <div className="flex items-end gap-1.5">
+                          <span
+                            className="w-1.5 h-3 rounded-full bg-gray-400 animate-pulse"
+                            style={{ animationDelay: "0ms" }}
+                          />
+                          <span
+                            className="w-1.5 h-5 rounded-full bg-gray-500 animate-pulse"
+                            style={{ animationDelay: "120ms" }}
+                          />
+                          <span
+                            className="w-1.5 h-3 rounded-full bg-gray-600 animate-pulse"
+                            style={{ animationDelay: "240ms" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -203,6 +213,7 @@ export const LandingPage = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleInputKeyDown}
+                  onFocus={handleInputFocus}   // 👈 important
                   placeholder="CHAT WITH ME !"
                   className="bg-transparent text-sm md:text-base lg:text-lg tracking-[0.22em] uppercase text-gray-200 placeholder-gray-500 outline-none flex-1"
                 />
