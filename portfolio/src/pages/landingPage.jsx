@@ -10,9 +10,7 @@ export const LandingPage = () => {
     {
       id: 1,
       sender: "bot",
-      text: "Hi, I’m Hemachandra 👋
-Ask me about my work or projects.
-First response may be slow, follow-ups are lightning fast ⚡",
+      text: "Hi, I’m Hemachandra 👋Ask me about my work or projects.First response may be slow, follow-ups are lightning fast ⚡",
     },
   ]);
 
