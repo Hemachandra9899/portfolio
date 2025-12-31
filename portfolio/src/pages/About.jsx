@@ -16,25 +16,18 @@ export const Profile = () => {
         {/* INTRO SECTION */}
         <section className="space-y-20 px-4 md:px-10 lg:px-16">
           <p className="text-3xl md:text-[3.3rem] leading-tight font-light">
-            I’m an entry-level software developer passionate about building
-            scalable, reliable, and high-performance systems. I’m comfortable
-            across the stack and enjoy working on backend services, full-stack
-            features, and test automation—bringing strong problem-solving and
-            debugging skills to every project I work on.
+            I’m an entry-level software developer who enjoys building reliable,
+            high-performance products across the stack.
           </p>
 
           <p className="text-3xl md:text-[3.3rem] leading-tight md:ml-32 lg:ml-48 max-w-6xl font-light">
-            I have experience designing REST APIs, managing databases, and
-            working with microservice architectures using Rust, Node.js, and
-            Express.js. My work spans backend systems, data streaming pipelines,
-            and responsive front-end interfaces built with React and Tailwind CSS.
+            I work on REST APIs, databases, and microservices using Rust, Node.js,
+            and Express, and I build responsive UIs with React and Tailwind.
           </p>
 
           <p className="text-3xl md:text-[3.3rem] leading-tight md:ml-32 lg:ml-48 max-w-6xl font-light">
-            I’m based in Hyderabad, India, and I care about crafting
-            well-designed products, efficient backend architectures, and
-            AI-driven workflows that make technology feel more intuitive and
-            helpful for people.
+            Based in Hyderabad, India—focused on clean design, efficient backend
+            architecture, and practical AI-driven workflows.
           </p>
         </section>
 
@@ -77,10 +70,9 @@ export const Profile = () => {
               <p className="font-medium text-white">SDET Intern, CodeNebula</p>
               <p className="text-zinc-400">Remote · Jul 2024 – Dec 2024</p>
               <p className="text-zinc-400">
-                Built a Web3 platform using React, Tailwind CSS, and Wagmi with
-                a Rust backend. Designed REST APIs in a microservice architecture,
-                deployed with Docker and GitHub Actions, and achieved 95%+ test
-                coverage.
+                Built a Web3 platform (React + Tailwind + Wagmi) with a Rust
+                backend. Shipped REST APIs, Docker deployments, CI via GitHub
+                Actions, and maintained 95%+ test coverage.
               </p>
             </div>
           </div>
@@ -91,11 +83,11 @@ export const Profile = () => {
               Skills
             </h3>
             <ul className="space-y-1 text-zinc-300">
-              <li>C, C++, Python, JavaScript, Rust</li>
-              <li>React.js, Node.js, Express.js, REST APIs</li>
-              <li>Microservice Architecture & Docker</li>
+              <li>Rust, JavaScript, Python, C/C++</li>
+              <li>React, Node.js, Express, REST APIs</li>
+              <li>Docker, Microservices, GitHub Actions</li>
               <li>MySQL, MongoDB, Kafka (basics)</li>
-              <li>Git, GitHub Actions, Postman, Figma</li>
+              <li>Git, Postman, Figma</li>
             </ul>
           </div>
 
@@ -107,12 +99,11 @@ export const Profile = () => {
             <ul className="space-y-3 text-zinc-300">
               <li>
                 <span className="font-medium text-white">
-                  SecondBrain (AI/Full-Stack Developer)
+                  SecondBrain (RAG Assistant)
                 </span>
                 <p>
-                  Built a personal AI assistant using RAG with open-source
-                  transformers and Pinecone vector DB. Developed frontend in React
-                  and backend in Node.js with PostgreSQL authentication.
+                  Built a personal AI assistant using RAG + Pinecone, with a React
+                  UI and Node.js backend (PostgreSQL auth).
                 </p>
               </li>
               <li>
@@ -120,9 +111,8 @@ export const Profile = () => {
                   Credit Card Fraud Detection
                 </span>
                 <p>
-                  Implemented Random Forest and Logistic Regression achieving
-                  92% accuracy. Optimized features and reduced false positives
-                  by 18%.
+                  Trained Random Forest + Logistic Regression models (~92%
+                  accuracy) and reduced false positives through feature tuning.
                 </p>
               </li>
             </ul>
@@ -140,9 +130,9 @@ export const Profile = () => {
                 Sreenidhi Institute of Science and Technology
               </span>
               <br />
-              B.Tech in Information Technology · CGPA 7.14/10
+              B.Tech (Information Technology) · CGPA 7.14/10
               <br />
-              Hyderabad, Telangana · Dec 2021 – Present
+              Hyderabad · Dec 2021 – Present
             </p>
           </div>
 
