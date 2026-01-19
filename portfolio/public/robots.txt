@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://portfolio-omega-vert-ehkt9x89mo.vercel.app/sitemap.xml
