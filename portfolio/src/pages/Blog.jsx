@@ -1,20 +1,15 @@
-// src/pages/Blog.jsx
 import { useEffect, useMemo, useState } from "react";
-import { Header } from "../pages/Header.jsx";
-
-import photoHero from "../assets/ss.png";
-import photoStreet from "../assets/nature.jpeg";
-import photoCode from "../assets/boat.jpeg";
+import { Link } from "react-router-dom";
 
 export const Blog = () => {
   const [progress, setProgress] = useState(0);
 
   const sections = useMemo(
     () => [
-      { id: "intro", label: "Intro" },
-      { id: "photography", label: "Photography" },
-      { id: "coding", label: "Code & LeetCode" },
-      { id: "wrap", label: "How I work" },
+      { id: "intro", label: "01. Intro" },
+      { id: "photography", label: "02. Photography" },
+      { id: "coding", label: "03. Code & LeetCode" },
+      { id: "wrap", label: "04. Methodology" },
     ],
     []
   );
@@ -34,366 +29,194 @@ export const Blog = () => {
   }, []);
 
   return (
-    <div
-      className="min-h-screen bg-black text-white"
-      style={{ fontFamily: '"Source Serif Pro", serif' }}
-    >
-      {/* Reading progress */}
-      <div className="fixed top-0 left-0 z-[60] h-[2px] w-full bg-transparent">
+    <div className="min-h-screen bg-[#6cf56c] text-black font-sans selection:bg-black selection:text-[#ffff4d] pb-24">
+      
+      {/* --- STYLES --- */}
+      <style>{`
+        .bg-grain {
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+        .hard-shadow { box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); }
+      `}</style>
+
+      {/* Texture Overlay */}
+      <div className="fixed inset-0 bg-grain pointer-events-none opacity-40 z-0" />
+
+      {/* READING PROGRESS BAR (Fixed Top) */}
+      <div className="fixed top-0 left-0 z-[60] h-2 w-full bg-black">
         <div
-          className="h-full bg-white/70"
+          className="h-full bg-[#ffff4d]"
           style={{ width: `${progress}%` }}
         />
       </div>
 
-      <Header />
+      {/* --- NAVIGATION --- */}
+      <nav className="relative z-20 px-6 py-8 flex justify-between items-center">
+        <Link to="/" className="group">
+          <button className="bg-black text-[#ffff4d] border-2 border-black px-6 py-2 font-mono font-bold uppercase tracking-widest hard-shadow hover:bg-white hover:text-black transition-all">
+            ← Back Home
+          </button>
+        </Link>
+        <span className="font-['Palette_Mosaic'] text-2xl md:text-3xl uppercase tracking-widest hidden md:block">
+          Blog_V1.0
+        </span>
+      </nav>
 
-      {/* Background accents */}
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute -top-40 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-white/10 blur-[120px]" />
-        <div className="absolute bottom-[-220px] right-[-140px] h-[520px] w-[520px] rounded-full bg-white/10 blur-[140px]" />
-      </div>
-
-      <main className="w-full pb-24 pt-16">
-        {/* HERO */}
-        <section className="px-4 md:px-6">
-          <div className="mx-auto w-full max-w-6xl">
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-950">
-              <div className="absolute inset-0">
-                <img
-                  src={photoHero}
-                  alt="Photography and coding mood"
-                  className="h-full w-full object-cover opacity-50"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
-              </div>
-
-              <div className="relative p-6 md:p-10 lg:p-12">
-                {/* Meta row */}
-                <div className="flex flex-wrap items-center gap-2 text-[11px] tracking-[0.25em] uppercase text-zinc-300/70">
-                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                    February 2025
-                  </span>
-                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                    Blog
-                  </span>
-                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                    4 min read
-                  </span>
-                </div>
-
-                <h1 className="mt-6 text-3xl md:text-5xl lg:text-6xl leading-tight font-light">
-                  Why I Balance Photography,
-                  <br />
-                  Code, and Problem Solving
-                </h1>
-
-                <p className="mt-4 max-w-2xl text-base md:text-xl text-zinc-200/90 leading-relaxed">
-                  A personal note on how walking with a camera and sitting with
-                  code both teach me to slow down, notice details, and enjoy the
-                  process of getting unstuck.
-                </p>
-
-                {/* Author card */}
-                <div className="mt-8 flex flex-wrap items-center gap-4">
-                  <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur">
-                    <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center text-sm">
-                      HR
-                    </div>
-                    <div>
-                      <p className="text-sm text-white">Hemachandra Reddy</p>
-                      <p className="text-xs text-zinc-300/70">
-                        Software Developer & Problem Solver
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-xs text-zinc-300/70">
-                    <span className="h-1 w-1 rounded-full bg-white/30" />
-                    <span>Notice details • Iterate • Keep going</span>
-                  </div>
-                </div>
-              </div>
+      <main className="relative z-10 w-full pt-8 px-6 md:px-12">
+        
+        {/* HERO HEADER */}
+        <section className="mx-auto w-full max-w-7xl mb-16">
+          <div className="border-4 border-black bg-white p-6 md:p-12 hard-shadow">
+            
+            {/* Meta Tags */}
+            <div className="flex flex-wrap gap-3 mb-8 font-mono text-xs font-bold uppercase">
+               <span className="bg-black text-white px-3 py-1">Feb 2025</span>
+               <span className="bg-[#ffff4d] text-black border border-black px-3 py-1">Editorial</span>
+               <span className="bg-gray-200 text-black border border-black px-3 py-1">4 min read</span>
             </div>
+
+            <h1 
+              className="text-[8vw] md:text-[5vw] leading-[0.9] font-black uppercase text-black mb-6"
+              style={{ fontFamily: '"Palette Mosaic", cursive' }}
+            >
+              Balance:<br/>
+              Camera & Code.
+            </h1>
+
+            <p className="text-xl md:text-2xl font-mono font-medium leading-relaxed max-w-3xl border-l-4 border-[#ffff4d] pl-6">
+              A personal note on how walking with a camera and sitting with code both teach me to slow down, notice details, and enjoy the process of getting unstuck.
+            </p>
           </div>
         </section>
 
         {/* CONTENT LAYOUT */}
-        <section className="mt-10 px-4 md:px-6">
-          <div className="mx-auto w-full max-w-6xl">
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10">
-              {/* ARTICLE */}
-              <article className="min-w-0">
-                {/* Intro */}
-                <section
-                  id="intro"
-                  className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-8"
-                >
-                  <div className="space-y-6 text-base md:text-xl leading-relaxed text-zinc-200">
-                    <p>
-                      Most of my days are split between two quiet activities:
-                      carrying a camera on long walks and sitting at my desk
-                      solving problems in code. They may look different from the
-                      outside, but for me they are the same habit—pay attention,
-                      explore a few angles, and slowly shape something that
-                      feels right.
-                    </p>
-                    <p>
-                      Photography trains my eye; coding trains my mind. Together,
-                      they keep me curious, patient, and comfortable with the
-                      feeling of not knowing the answer yet.
-                    </p>
+        <section className="mx-auto w-full max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
+            
+            {/* ARTICLE COLUMN */}
+            <article className="min-w-0 space-y-12">
+              
+              {/* 01. INTRO */}
+              <section id="intro" className="bg-[#ffff4d] border-4 border-black p-8 hard-shadow">
+                <h2 className="font-black text-2xl uppercase mb-6 border-b-4 border-black inline-block">01. Intro</h2>
+                <div className="font-mono text-lg md:text-xl leading-relaxed space-y-6">
+                  <p>
+                    Most of my days are split between two quiet activities: carrying a camera on long walks and sitting at my desk solving problems in code. They may look different from the outside, but for me they are the same habit—<span className="bg-white px-1">pay attention, explore a few angles, and slowly shape something that feels right.</span>
+                  </p>
+                  <p>
+                    Photography trains my eye; coding trains my mind. Together, they keep me curious, patient, and comfortable with the feeling of not knowing the answer yet.
+                  </p>
+                </div>
+              </section>
 
-                    {/* Pull quote */}
-                    <div className="mt-8 rounded-xl border border-white/10 bg-black/30 p-5 md:p-6">
-                      <p className="text-zinc-100 text-lg md:text-2xl leading-snug font-light">
-                        “Pay attention, explore a few angles, and slowly shape
-                        something that feels right.”
-                      </p>
-                      <p className="mt-2 text-xs text-zinc-500 tracking-[0.2em] uppercase">
-                        A mindset I reuse everywhere
-                      </p>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Photography */}
-                <section
-                  id="photography"
-                  className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-8"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-sm">
-                      1
-                    </span>
-                    <h2 className="text-xl md:text-3xl font-semibold text-white">
-                      Photography: slowing down and seeing clearly
-                    </h2>
+              {/* 02. PHOTOGRAPHY */}
+              <section id="photography" className="bg-white border-4 border-black p-8 hard-shadow">
+                <h2 className="font-black text-2xl uppercase mb-6 border-b-4 border-black inline-block">02. Photography</h2>
+                <div className="font-mono text-lg md:text-xl leading-relaxed space-y-6">
+                  <p>
+                    Photography is how I slow everything down. It forces me to notice small details—light on a wall, a reflection in a window, the way people move through a street.
+                  </p>
+                  
+                  {/* Pull Quote */}
+                  <div className="bg-black text-[#ffff4d] p-6 my-8 rotate-1 border-2 border-[#ffff4d]">
+                    <p className="font-bold text-xl uppercase text-center">
+                      "My favorite photos are rarely planned; they happen when I’m just paying attention."
+                    </p>
                   </div>
 
-                  <div className="mt-6 space-y-6 text-base md:text-xl leading-relaxed text-zinc-200">
-                    <p>
-                      Photography is how I slow everything down. It forces me to
-                      notice small details—light on a wall, a reflection in a
-                      window, the way people move through a street. The same
-                      attention to detail that helps me write clean code is what
-                      makes photography so satisfying to me.
-                    </p>
-                    <p>
-                      I like working with natural light, quiet city corners, and
-                      empty spaces. My favorite photos are rarely planned; they
-                      usually happen on long walks, when I’m not thinking about
-                      “getting a shot” but just paying attention to whatever is
-                      in front of me.
-                    </p>
+                  <p>
+                    I like working with natural light, quiet city corners, and empty spaces. It's not about "getting a shot" but just being present.
+                  </p>
+                </div>
+              </section>
 
-                    <figure className="mt-2 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
-                      <img
-                        src={photoStreet}
-                        alt="Street scene from a walk"
-                        className="w-full h-[240px] md:h-[320px] object-cover"
-                      />
-                      <figcaption className="px-4 py-3 text-xs md:text-sm text-zinc-500 italic">
-                        A frame from one of my walks—simple light, simple shapes,
-                        and a quiet moment.
-                      </figcaption>
-                    </figure>
-                  </div>
-                </section>
-
-                {/* Code */}
-                <section
-                  id="coding"
-                  className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-8"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-sm">
-                      2
-                    </span>
-                    <h2 className="text-xl md:text-3xl font-semibold text-white">
-                      Code, LeetCode, and the joy of getting unstuck
-                    </h2>
-                  </div>
-
-                  <div className="mt-6 space-y-6 text-base md:text-xl leading-relaxed text-zinc-200">
-                    <p>
-                      When I’m not out taking photos, I’m usually in front of a
-                      keyboard solving problems. I regularly code on
-                      LeetCode—not just for a streak, but for that moment when a
-                      tricky problem finally clicks and the solution feels
-                      obvious in hindsight.
-                    </p>
-                    <p>
-                      I treat each problem like a tiny design challenge:
-                      understand the constraints, explore a few approaches, and
-                      then aim for the cleanest solution I can write. Over time,
-                      this habit has made me faster at spotting patterns and
-                      more confident when working on real-world systems.
-                    </p>
-
-                    <figure className="mt-2 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
-                      <img
-                        src={photoCode}
-                        alt="Code on screen"
-                        className="w-full h-[240px] md:h-[320px] object-cover"
-                      />
-                      <figcaption className="px-4 py-3 text-xs md:text-sm text-zinc-500 italic">
-                        The same patience I use when composing a photo helps
-                        when I’m debugging or refactoring code.
-                      </figcaption>
-                    </figure>
-
-                    <div className="mt-4 flex flex-col gap-2 rounded-xl border border-white/10 bg-black/30 p-5">
-                      <p className="text-xs tracking-[0.25em] uppercase text-zinc-500">
-                        Where I practice
-                      </p>
-                      <a
-                        href="https://leetcode.com/u/Hemachandra9899/"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-2 text-base md:text-xl text-sky-300 hover:underline underline-offset-4"
-                      >
-                        leetcode.com/u/Hemachandra9899
-                        <span className="text-zinc-500 text-sm">↗</span>
-                      </a>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Wrap */}
-                <section
-                  id="wrap"
-                  className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-8"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-sm">
-                      3
-                    </span>
-                    <h2 className="text-xl md:text-3xl font-semibold text-white">
-                      Bringing it back to how I work
-                    </h2>
-                  </div>
-
-                  <div className="mt-6 space-y-6 text-base md:text-xl leading-relaxed text-zinc-200">
-                    <p>
-                      Both photography and coding remind me that good work
-                      doesn’t happen in a rush. It comes from paying attention,
-                      trying small ideas, and not giving up when something feels
-                      stuck for a while.
-                    </p>
-                    <p>
-                      Whether I’m debugging a backend service or waiting for the
-                      light to fall just right on a building, I try to bring the
-                      same mindset: stay patient, stay curious, and keep
-                      improving one small step at a time.
-                    </p>
-
-                    {/* CTA */}
-                    <div className="mt-8 rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-white/[0.02] p-6">
-                      <p className="text-lg md:text-2xl font-light text-zinc-100">
-                        Thanks for reading.
-                      </p>
-                      <p className="mt-2 text-sm md:text-base text-zinc-300/80">
-                        If any of this resonated—cameras, code, or both—I’d be
-                        happy to connect.
-                      </p>
-                      <div className="mt-4 flex flex-wrap gap-3">
-                        <a
-                          href="https://leetcode.com/u/Hemachandra9899/"
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm text-zinc-100 hover:bg-white/10"
-                        >
-                          LeetCode ↗
-                        </a>
-                        <a
-                          href="#intro"
-                          className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm text-zinc-100 hover:bg-white/10"
-                        >
-                          Back to top ↑
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Footer */}
-                <footer className="mt-10 pt-8 text-xs md:text-sm text-zinc-500">
-                  <div className="border-t border-zinc-800 pt-6">
-                    Built with patience, curiosity, and a lot of small iterations.
-                  </div>
-                </footer>
-              </article>
-
-              {/* SIDEBAR */}
-              <aside className="hidden lg:block">
-                <div className="sticky top-24 space-y-4">
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                    <p className="text-xs tracking-[0.25em] uppercase text-zinc-500">
-                      On this page
-                    </p>
-                    <nav className="mt-4 space-y-2">
-                      {sections.map((s) => (
-                        <a
-                          key={s.id}
-                          href={`#${s.id}`}
-                          className="block rounded-lg border border-transparent px-3 py-2 text-sm text-zinc-300 hover:bg-white/5 hover:text-white"
-                        >
-                          {s.label}
-                        </a>
-                      ))}
-                    </nav>
-                  </div>
-
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                    <p className="text-xs tracking-[0.25em] uppercase text-zinc-500">
-                      Quick meta
-                    </p>
-                    <div className="mt-3 space-y-2 text-sm text-zinc-300">
-                      <div className="flex items-center justify-between">
-                        <span className="text-zinc-500">Topic</span>
-                        <span>Photography + Coding</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-zinc-500">Style</span>
-                        <span>Editorial</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-zinc-500">Read</span>
-                        <span>{Math.round(progress)}%</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                    <p className="text-xs tracking-[0.25em] uppercase text-zinc-500">
-                      Share
-                    </p>
-                    <div className="mt-3 flex gap-2">
-                      <button
-                        onClick={() => navigator.clipboard?.writeText(window.location.href)}
-                        className="flex-1 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-zinc-100 hover:bg-white/10"
-                      >
-                        Copy link
-                      </button>
-                      <a
-                        href="https://leetcode.com/u/Hemachandra9899/"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex-1 text-center rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-zinc-100 hover:bg-white/10"
-                      >
-                        LeetCode
-                      </a>
-                    </div>
-                    <p className="mt-2 text-xs text-zinc-500">
-                      (Copy link for socials)
-                    </p>
+              {/* 03. CODING */}
+              <section id="coding" className="bg-black text-white border-4 border-black p-8 hard-shadow">
+                <h2 className="font-black text-2xl uppercase mb-6 text-[#ffff4d] border-b-4 border-[#ffff4d] inline-block">03. Code & LeetCode</h2>
+                <div className="font-mono text-lg md:text-xl leading-relaxed space-y-6">
+                  <p>
+                    When I’m not out taking photos, I’m usually in front of a keyboard. I regularly code on LeetCode—not just for a streak, but for that moment when a tricky problem finally clicks.
+                  </p>
+                  <p>
+                    I treat each problem like a tiny design challenge: <span className="bg-[#ffff4d] text-black px-1">understand constraints, explore approaches, and write clean solutions.</span>
+                  </p>
+                  
+                  <div className="mt-6 border-2 border-[#ffff4d] border-dashed p-4 text-center">
+                    <p className="text-sm uppercase tracking-widest text-gray-400 mb-2">My Practice Arena</p>
+                    <a href="https://leetcode.com/u/Hemachandra9899/" target="_blank" rel="noreferrer" className="text-[#ffff4d] text-2xl font-bold hover:underline">
+                      leetcode.com/u/Hemachandra9899 ↗
+                    </a>
                   </div>
                 </div>
-              </aside>
-            </div>
+              </section>
+
+              {/* 04. WRAP UP */}
+              <section id="wrap" className="bg-white border-4 border-black p-8 hard-shadow">
+                <h2 className="font-black text-2xl uppercase mb-6 border-b-4 border-black inline-block">04. Methodology</h2>
+                <div className="font-mono text-lg md:text-xl leading-relaxed space-y-6">
+                  <p>
+                    Both photography and coding remind me that good work doesn’t happen in a rush. It comes from paying attention, trying small ideas, and not giving up when something feels stuck.
+                  </p>
+                  <p>
+                    Stay patient, stay curious, and keep improving one small step at a time.
+                  </p>
+                </div>
+
+                <div className="mt-12 pt-8 border-t-4 border-black">
+                   <p className="font-bold uppercase text-sm mb-4">Thanks for reading.</p>
+                   <div className="flex gap-4">
+                     <a href="https://leetcode.com/u/Hemachandra9899/" className="bg-black text-white px-4 py-2 font-mono font-bold hover:bg-[#ffff4d] hover:text-black border-2 border-black transition-colors">
+                       LEETCODE ↗
+                     </a>
+                     <a href="#intro" className="bg-white text-black px-4 py-2 font-mono font-bold hover:bg-black hover:text-white border-2 border-black transition-colors">
+                       BACK TO TOP ↑
+                     </a>
+                   </div>
+                </div>
+              </section>
+
+            </article>
+
+            {/* SIDEBAR (Sticky Index Card) */}
+            <aside className="hidden lg:block h-full">
+              <div className="sticky top-24">
+                <div className="bg-[#ffff4d] border-4 border-black p-6 hard-shadow rotate-1">
+                  <h3 className="font-black text-xl uppercase mb-4 border-b-2 border-black pb-2">Index</h3>
+                  <nav className="flex flex-col gap-2 font-mono font-bold text-sm">
+                    {sections.map((s) => (
+                      <a
+                        key={s.id}
+                        href={`#${s.id}`}
+                        className="block py-2 px-2 hover:bg-black hover:text-[#ffff4d] transition-colors border-l-2 border-transparent hover:border-[#ffff4d]"
+                      >
+                        {s.label}
+                      </a>
+                    ))}
+                  </nav>
+                </div>
+
+                <div className="mt-8 bg-black text-white border-4 border-black p-6 hard-shadow -rotate-1">
+                  <h3 className="font-black text-xl uppercase mb-4 text-[#ffff4d]">Share</h3>
+                  <div className="flex flex-col gap-3">
+                    <button
+                        onClick={() => navigator.clipboard?.writeText(window.location.href)}
+                        className="bg-white text-black font-mono font-bold py-2 border-2 border-transparent hover:border-[#ffff4d] hover:bg-transparent hover:text-white"
+                      >
+                        COPY LINK
+                      </button>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
           </div>
         </section>
+
+        {/* FOOTER */}
+        <footer className="mt-24 border-t-4 border-black pt-8 text-center font-mono font-bold text-sm uppercase">
+          <p>© 2025 Hemachandra Reddy // Built with code & curiosity.</p>
+        </footer>
+
       </main>
     </div>
   );

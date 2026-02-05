@@ -9,3 +9,23 @@
   background-size: 300% 300%;
   animation: gradientMove 10s ease infinite;
 }
+/* src/index.css */
+
+@keyframes wave {
+  0% { transform: rotate( 0.0deg) }
+  10% { transform: rotate(14.0deg) }  /* Wave Right */
+  20% { transform: rotate(-8.0deg) }  /* Wave Left */
+  30% { transform: rotate(14.0deg) }  /* Wave Right */
+  40% { transform: rotate(-4.0deg) }  /* Wave Left */
+  50% { transform: rotate(10.0deg) }  /* Wave Right */
+  60% { transform: rotate( 0.0deg) }  /* Back to center */
+  100% { transform: rotate( 0.0deg) }
+}
+
+.animate-wave {
+  animation-name: wave;
+  animation-duration: 2.5s;        /* Takes 2.5s to complete one wave cycle */
+  animation-iteration-count: infinite; /* Keeps waving forever */
+  transform-origin: 70% 70%;       /* Rotates from the bottom-right palm, not center */
+  display: inline-block;
+}
