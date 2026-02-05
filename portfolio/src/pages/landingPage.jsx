@@ -13,6 +13,18 @@ export const LandingPage = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // --- Crazy Mode State (With Local Storage Persistence) ---
+  const [isCrazy, setIsCrazy] = useState(() => {
+    // 1. Check local storage on initial load
+    const savedMode = localStorage.getItem("portfolio_crazy_mode");
+    return savedMode === "true";
+  });
+
+  // 2. Update local storage whenever isCrazy changes
+  useEffect(() => {
+    localStorage.setItem("portfolio_crazy_mode", isCrazy);
+  }, [isCrazy]);
+
   // --- Chat / AI State ---
   const [messages, setMessages] = useState([
     {
@@ -117,93 +129,167 @@ export const LandingPage = () => {
   // 5. RENDER
   // =========================================
   return (
-    <div className="relative min-h-screen bg-[#6cf56c] text-black overflow-hidden font-sans selection:bg-black selection:text-[#ffff4d]">
+    // DYNAMIC CONTAINER CLASS based on 'isCrazy'
+    <div className={`
+      relative min-h-screen overflow-hidden font-sans transition-colors duration-500 ease-in-out
+      ${isCrazy ? 'bg-[#050505] text-[#39ff14] selection:bg-[#ff00ff] selection:text-white' : 'bg-[#6cf56c] text-black selection:bg-black selection:text-[#ffff4d]'}
+    `}>
       
-      {/* --- STYLES --- */}
+      {/* --- CSS MAGIC FOR CRAZY MODE --- */}
       <style>{`
+        /* Standard Grain */
         .bg-grain { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); }
+        
+        /* CRAZY: CRT Scanline Effect */
+        .scanlines {
+          background: linear-gradient(
+            to bottom,
+            rgba(255,255,255,0),
+            rgba(255,255,255,0) 50%,
+            rgba(0,0,0,0.2) 50%,
+            rgba(0,0,0,0.2)
+          );
+          background-size: 100% 4px;
+          animation: scanline 0.2s linear infinite;
+          pointer-events: none;
+        }
+
+        /* CRAZY: Glitch Animation for Text */
+        .glitch-text {
+          position: relative;
+          color: #39ff14;
+        }
+        .glitch-text::before, .glitch-text::after {
+          content: attr(data-text);
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0.8;
+        }
+        .glitch-text::before {
+          color: #ff00ff;
+          z-index: -1;
+          animation: glitch-anim-1 0.4s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+          color: #00ffff;
+          z-index: -2;
+          animation: glitch-anim-2 0.4s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim-1 {
+          0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 2px); }
+          20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -2px); }
+          40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
+          60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
+          80% { clip-path: inset(10% 0 70% 0); transform: translate(-2px, 2px); }
+          100% { clip-path: inset(30% 0 20% 0); transform: translate(2px, -2px); }
+        }
+        @keyframes glitch-anim-2 {
+          0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -2px); }
+          20% { clip-path: inset(80% 0 5% 0); transform: translate(-2px, 2px); }
+          40% { clip-path: inset(30% 0 20% 0); transform: translate(2px, -2px); }
+          60% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, 2px); }
+          80% { clip-path: inset(50% 0 30% 0); transform: translate(2px, -2px); }
+          100% { clip-path: inset(20% 0 60% 0); transform: translate(-2px, 2px); }
+        }
+
+        /* Animations */
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .animate-scroll { animation: scroll 20s linear infinite; }
+        .animate-scroll-fast { animation: scroll 5s linear infinite; } /* CRAZY SPEED */
+        
         .hard-shadow { box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); }
-        .hard-shadow-sm { box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
+        .neon-shadow { box-shadow: 0px 0px 10px 2px #39ff14, 4px 4px 0px 0px #ff00ff; } /* CRAZY SHADOW */
       `}</style>
 
-      {/* Background Texture */}
+      {/* Background Texture (Plus Scanlines if Crazy) */}
       <div className="absolute inset-0 bg-grain pointer-events-none opacity-40 z-0" />
+      {isCrazy && <div className="absolute inset-0 scanlines z-[1] opacity-30" />}
 
       {/* =========================================
-          TOP NAVIGATION (Menu Button Only)
-          FIX: Removed 'mix-blend-exclusion' and ensured z-index: 50
+          TOP NAVIGATION
       ========================================= */}
       <nav className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-10 md:py-8 flex items-center justify-between pointer-events-none">
         
         {/* LOGO */}
         <button onClick={() => navigate('/')} className="pointer-events-auto group">
           <span 
-            className="text-3xl md:text-4xl font-black text-[#ffff4d] uppercase tracking-tighter transition-transform duration-300 group-hover:scale-110 inline-block"
+            className={`
+              text-3xl md:text-4xl font-black uppercase tracking-tighter transition-transform duration-300 group-hover:scale-110 inline-block
+              ${isCrazy ? 'text-[#ff00ff] drop-shadow-[2px_2px_0px_#00ffff]' : 'text-[#ffff4d] text-shadow-[3px_3px_0px_#000]'}
+            `}
             style={{ 
               fontFamily: '"Palette Mosaic", cursive',
-              textShadow: '3px 3px 0px #000', // Increased shadow for visibility
-              WebkitTextStroke: '1px black'   // Added outline for visibility against content
+              WebkitTextStroke: isCrazy ? '1px #39ff14' : '1px black'
             }}
           >
             HC
           </span>
         </button>
 
-        {/* MENU BUTTON */}
-        <button
-          onClick={() => setIsMenuOpen(true)}
-          className="
-            pointer-events-auto
-            bg-[#ffff4d] text-black 
-            border-2 border-black 
-            px-4 py-2 md:px-6 md:py-3
-            font-bold font-mono uppercase tracking-widest text-xs md:text-sm
-            shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-            hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none
-            active:bg-white
-            transition-all duration-200
-            z-50 relative
-          "
-        >
-          Menu [ + ]
-        </button>
+        {/* RIGHT SIDE: CRAZY TOGGLE + MENU */}
+        <div className="flex gap-4 pointer-events-auto">
+          
+          {/* CRAZY MODE TOGGLE */}
+          <button
+            onClick={() => setIsCrazy(!isCrazy)}
+            className={`
+              border-2 px-3 py-2 md:px-4 md:py-3 font-bold font-mono uppercase text-xs md:text-sm transition-all duration-200
+              ${isCrazy 
+                ? 'bg-transparent text-[#ff00ff] border-[#ff00ff] shadow-[0_0_10px_#ff00ff] animate-pulse' 
+                : 'bg-black text-white border-black hover:bg-gray-800'
+              }
+            `}
+          >
+            {isCrazy ? '⚠ NORMAL' : '⚡ CRAZY'}
+          </button>
+
+          {/* MENU BUTTON */}
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className={`
+              border-2 px-4 py-2 md:px-6 md:py-3 font-bold font-mono uppercase tracking-widest text-xs md:text-sm transition-all duration-200
+              ${isCrazy 
+                ? 'bg-transparent text-[#39ff14] border-[#39ff14] shadow-[4px_4px_0px_0px_#ff00ff] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none' 
+                : 'bg-[#ffff4d] text-black border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none active:bg-white'
+              }
+            `}
+          >
+            Menu [ + ]
+          </button>
+        </div>
       </nav>
 
       {/* =========================================
-          FULLSCREEN MENU OVERLAY (No Footer)
-          z-index: 60 (Higher than Nav)
+          FULLSCREEN MENU OVERLAY
       ========================================= */}
       <div
         className={`
           fixed inset-0 z-[60]
-          bg-[#ffff4d]
           flex flex-col
           transition-transform duration-500 cubic-bezier(0.7, 0, 0.3, 1)
           ${isMenuOpen ? "translate-y-0" : "-translate-y-full"}
+          ${isCrazy ? "bg-black" : "bg-[#ffff4d]"}
         `}
       >
-        {/* CLOSE BUTTON */}
         <div className="absolute top-6 right-6 md:top-10 md:right-10">
           <button
             onClick={() => setIsMenuOpen(false)}
-            className="
-              bg-black text-[#ffff4d]
-              border-2 border-black
-              px-4 py-2 md:px-6 md:py-3
-              font-bold font-mono uppercase tracking-widest text-xs md:text-sm
-              shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]
-              hover:bg-white hover:text-black hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-              hover:translate-y-[2px] hover:translate-x-[2px] 
-              transition-all duration-200
-            "
+            className={`
+              border-2 px-4 py-2 md:px-6 md:py-3 font-bold font-mono uppercase tracking-widest text-xs md:text-sm transition-all
+              ${isCrazy 
+                ? 'bg-transparent text-[#ff00ff] border-[#ff00ff] shadow-[4px_4px_0px_0px_#39ff14]' 
+                : 'bg-black text-[#ffff4d] border-black shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]'
+              }
+            `}
           >
             Close [ X ]
           </button>
         </div>
 
-        {/* NAVIGATION LINKS */}
         <nav className="flex-1 flex flex-col justify-center items-center gap-2">
           {menuItems.map(({ label, path }, index) => (
             <button
@@ -211,20 +297,20 @@ export const LandingPage = () => {
               onClick={() => handleMenuClick(path)}
               className="group relative w-full text-center py-4 overflow-hidden"
             >
-              <div className="absolute inset-0 bg-black translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-300 ease-out" />
+              {/* Crazy Mode: Neon Glitch Hover / Normal: Slide Black */}
+              <div className={`absolute inset-0 translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-300 ease-out ${isCrazy ? 'bg-[#39ff14]' : 'bg-black'}`} />
+              
               <span 
-                className="
-                  relative z-10
-                  text-5xl md:text-7xl lg:text-9xl 
-                  font-black uppercase tracking-tighter
-                  text-black group-hover:text-[#ffff4d]
-                  transition-colors duration-300
-                "
+                className={`
+                  relative z-10 text-5xl md:text-7xl lg:text-9xl font-black uppercase tracking-tighter transition-colors duration-300
+                  ${isCrazy ? 'text-white group-hover:text-black mix-blend-difference' : 'text-black group-hover:text-[#ffff4d]'}
+                `}
                 style={{ fontFamily: '"Palette Mosaic", cursive' }}
               >
                 {label}
               </span>
-              <span className="absolute top-1/2 left-4 md:left-10 -translate-y-1/2 font-mono text-xs md:text-sm font-bold text-black/30 group-hover:text-[#ffff4d]/50 transition-colors duration-300">
+              
+              <span className={`absolute top-1/2 left-4 md:left-10 -translate-y-1/2 font-mono text-xs md:text-sm font-bold transition-colors duration-300 ${isCrazy ? 'text-[#ff00ff]' : 'text-black/30 group-hover:text-[#ffff4d]/50'}`}>
                 0{index + 1}
               </span>
             </button>
@@ -232,44 +318,51 @@ export const LandingPage = () => {
         </nav>
       </div>
 
-      {/* --- HERO CONTENT --- 
-          z-index: 10 (Lower than Nav)
-      */}
+      {/* --- HERO CONTENT --- */}
       <main className="relative z-10 px-6 md:px-12 pt-32 md:pt-44 flex flex-col justify-center min-h-[85vh]">
         <div className="max-w-7xl">
           <h1 
-            className="text-[14vw] md:text-[11vw] leading-[0.85] font-black uppercase text-[#ffff4d]"
+            // CRAZY MODE: Adds 'glitch-text' class and data-text for the effect
+            data-text="HemaChandra"
+            className={`
+              text-[14vw] md:text-[11vw] leading-[0.85] font-black uppercase transition-colors duration-300
+              ${isCrazy ? 'glitch-text text-[#39ff14] drop-shadow-[0_0_15px_rgba(57,255,20,0.8)]' : 'text-[#ffff4d]'}
+            `}
             style={{ 
               fontFamily: '"Palette Mosaic", cursive',
-              textShadow: '6px 6px 0px #000',
-              WebkitTextStroke: '3px black'
+              textShadow: isCrazy ? 'none' : '6px 6px 0px #000', 
+              WebkitTextStroke: isCrazy ? 'none' : '3px black'
             }}
           >
-            Hemachandra Reddy.
+            Hema<br/>Chandra
           </h1>
         </div>
 
-        {/* ABOUT CARD (Smaller Version)
-            Changes: 
-            - max-w-2xl -> max-w-xl
-            - p-6 md:p-8 -> p-5 md:p-6
-            - Text sizes reduced slightly
-        */}
+        {/* ABOUT CARD */}
         <div className="mt-8 md:mt-12 max-w-xl mb-32 md:mb-0">
-          <div className="bg-white border-4 border-black p-5 md:p-6 hard-shadow rotate-1 hover:rotate-0 transition-transform duration-300">
-            <h2 className="text-xl md:text-2xl font-bold uppercase tracking-tighter mb-3 bg-black text-white inline-block px-2">
+          <div className={`
+            border-4 p-5 md:p-6 transition-all duration-300
+            ${isCrazy 
+              ? 'bg-black/50 border-[#39ff14] text-[#39ff14] neon-shadow backdrop-blur-md rotate-0 hover:-rotate-1' 
+              : 'bg-white border-black hard-shadow rotate-1 hover:rotate-0'
+            }
+          `}>
+            <h2 className={`
+              text-xl md:text-2xl font-bold uppercase tracking-tighter mb-3 inline-block px-2
+              ${isCrazy ? 'bg-[#ff00ff] text-white' : 'bg-black text-white'}
+            `}>
               Software Engineer
             </h2>
             <p className="text-base md:text-lg font-bold leading-relaxed font-mono">
-              I build <span className="bg-[#ffff4d] px-1 border border-black">empathetic software</span> grounded in research. 
-              Focused on solving meaningful problems with clarity and code.
+              I build <span className={`${isCrazy ? 'bg-[#39ff14] text-black' : 'bg-[#ffff4d]'} px-1 border border-black`}>empathetic software</span> grounded in research. 
+              Focused on solving meaningful problems.
             </p>
 
             <div className="flex gap-3 mt-6 flex-wrap">
-              <a href="https://github.com/Hemachandra9899" target="_blank" rel="noreferrer" className="bg-black text-white px-5 py-2 font-bold uppercase border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-colors hard-shadow-sm text-sm">
+              <a href="https://github.com/Hemachandra9899" target="_blank" rel="noreferrer" className={`px-5 py-2 font-bold uppercase border-2 transition-colors text-sm ${isCrazy ? 'bg-transparent text-[#00ffff] border-[#00ffff] hover:bg-[#00ffff] hover:text-black' : 'bg-black text-white border-transparent hover:bg-white hover:text-black hover:border-black hard-shadow-sm'}`}>
                 GitHub
               </a>
-              <a href="https://www.linkedin.com/in/hemachandra-reddy" target="_blank" rel="noreferrer" className="bg-[#005AFF] text-white px-5 py-2 font-bold uppercase border-2 border-black hover:bg-white hover:text-[#005AFF] transition-colors hard-shadow-sm text-sm">
+              <a href="https://www.linkedin.com/in/hemachandra-reddy" target="_blank" rel="noreferrer" className={`px-5 py-2 font-bold uppercase border-2 transition-colors text-sm ${isCrazy ? 'bg-transparent text-[#ff00ff] border-[#ff00ff] hover:bg-[#ff00ff] hover:text-white' : 'bg-[#005AFF] text-white border-black hover:bg-white hover:text-[#005AFF] hard-shadow-sm'}`}>
                 LinkedIn
               </a>
             </div>
@@ -277,84 +370,88 @@ export const LandingPage = () => {
         </div>
       </main>
 
-      {/* --- MARQUEE --- 
-          z-index: 20 (Higher than Content, Lower than Chat)
-      */}
-      <div className="fixed bottom-0 left-0 w-full bg-black border-t-4 border-black py-3 z-20 overflow-hidden whitespace-nowrap">
-        <div className="inline-block animate-scroll">
-          <span className="text-[#ffff4d] font-mono text-xl md:text-2xl font-bold mx-4">
-            OPEN FOR WORK /// FULL STACK DEV /// REACT WIZARD /// LET'S BUILD SOMETHING COOL /// 
-          </span>
-          <span className="text-[#ffff4d] font-mono text-xl md:text-2xl font-bold mx-4">
-            OPEN FOR WORK /// FULL STACK DEV /// REACT WIZARD /// LET'S BUILD SOMETHING COOL /// 
-          </span>
-           <span className="text-[#ffff4d] font-mono text-xl md:text-2xl font-bold mx-4">
-            OPEN FOR WORK /// FULL STACK DEV /// REACT WIZARD /// LET'S BUILD SOMETHING COOL /// 
-          </span>
+      {/* --- MARQUEE --- */}
+      <div className={`
+        fixed bottom-0 left-0 w-full border-t-4 py-3 z-20 overflow-hidden whitespace-nowrap
+        ${isCrazy ? 'bg-black border-[#ff00ff]' : 'bg-black border-black'}
+      `}>
+        {/* Crazy Mode Speeds up animation to 'animate-scroll-fast' */}
+        <div className={`inline-block ${isCrazy ? 'animate-scroll-fast' : 'animate-scroll'}`}>
+          <span className={`font-mono text-xl md:text-2xl font-bold mx-4 ${isCrazy ? 'text-[#ff00ff]' : 'text-[#ffff4d]'}`}>OPEN FOR WORK /// FULL STACK DEV /// REACT WIZARD /// </span>
+          <span className={`font-mono text-xl md:text-2xl font-bold mx-4 ${isCrazy ? 'text-[#00ffff]' : 'text-[#ffff4d]'}`}>OPEN FOR WORK /// FULL STACK DEV /// REACT WIZARD /// </span>
+          <span className={`font-mono text-xl md:text-2xl font-bold mx-4 ${isCrazy ? 'text-[#39ff14]' : 'text-[#ffff4d]'}`}>OPEN FOR WORK /// FULL STACK DEV /// REACT WIZARD /// </span>
         </div>
       </div>
 
-      {/* --- CHAT BUTTON --- 
-          z-index: 40
-      */}
+      {/* --- CHAT BUTTON --- */}
       {!isChatOpen && (
         <button
           onClick={() => setIsChatOpen(true)}
           className="fixed bottom-24 right-6 md:bottom-28 md:right-16 z-40 group"
           aria-label="Open Chat"
         >
-          <div className="relative w-20 h-20 md:w-24 md:h-24 bg-[#ffff4d] border-4 border-black rounded-full flex items-center justify-center hard-shadow transition-transform duration-200 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none">
+          <div className={`
+            relative w-20 h-20 md:w-24 md:h-24 border-4 rounded-full flex items-center justify-center transition-transform duration-200 hover:-translate-y-1 hover:-translate-x-1 active:translate-y-0.5 active:translate-x-0.5
+            ${isCrazy 
+              ? 'bg-black border-[#39ff14] shadow-[0_0_20px_#39ff14] hover:shadow-[0_0_40px_#ff00ff]' 
+              : 'bg-[#ffff4d] border-black hard-shadow'
+            }
+          `}>
             <img 
               src={sparkIcon} 
               alt="AI" 
-              className="w-10 h-10 md:w-12 md:h-12 group-hover:rotate-12 transition-transform duration-300"
+              className={`w-10 h-10 md:w-12 md:h-12 transition-transform duration-300 group-hover:rotate-12 ${isCrazy && 'invert hue-rotate-180'}`} 
             />
-            <div className="absolute -top-4 -left-10 bg-white border-2 border-black px-3 py-1 text-xs font-bold uppercase rotate-[-6deg]">
+            <div className={`
+              absolute -top-4 -left-10 border-2 px-3 py-1 text-xs font-bold uppercase rotate-[-6deg]
+              ${isCrazy ? 'bg-black text-[#00ffff] border-[#00ffff]' : 'bg-white text-black border-black'}
+            `}>
               Talk to AI
             </div>
           </div>
         </button>
       )}
 
-      {/* --- CHAT DRAWER --- 
-          z-index: 100
-      */}
+      {/* --- CHAT DRAWER --- */}
       <div className={`fixed inset-0 z-[100] ${isChatOpen ? "pointer-events-auto" : "pointer-events-none"}`}>
         <div 
           onClick={() => setIsChatOpen(false)}
-          className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${isChatOpen ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 backdrop-blur-sm transition-opacity duration-300 ${isChatOpen ? 'opacity-100' : 'opacity-0'} ${isCrazy ? 'bg-[#39ff14]/10' : 'bg-black/60'}`}
         />
 
         <div className={`
           absolute bottom-0 left-0 w-full md:max-w-2xl md:left-1/2 md:-translate-x-1/2
-          bg-[#ffff4d] border-t-4 border-x-4 border-black
+          border-t-4 border-x-4 
           flex flex-col
           transition-transform duration-500 ease-in-out
           ${isChatOpen ? "translate-y-0" : "translate-y-[120%]"}
           h-[80vh] md:h-[85vh]
           rounded-t-3xl shadow-2xl
+          ${isCrazy ? 'bg-black border-[#ff00ff] shadow-[0_-10px_40px_rgba(255,0,255,0.4)]' : 'bg-[#ffff4d] border-black'}
         `}>
           
-          <div className="bg-black text-[#ffff4d] px-6 py-4 flex justify-between items-center rounded-t-[20px]">
+          <div className={`px-6 py-4 flex justify-between items-center rounded-t-[20px] ${isCrazy ? 'bg-[#ff00ff] text-black' : 'bg-black text-[#ffff4d]'}`}>
             <h3 className="font-['Palette_Mosaic'] text-2xl uppercase tracking-widest">
               My_AI.exe
             </h3>
             <button 
               onClick={() => setIsChatOpen(false)}
-              className="text-[#ffff4d] hover:text-white font-mono text-xl font-bold"
+              className={`font-mono text-xl font-bold ${isCrazy ? 'text-white hover:text-black' : 'text-[#ffff4d] hover:text-white'}`}
             >
               [X] CLOSE
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-[#ffff4d]">
+          <div className={`flex-1 overflow-y-auto p-6 space-y-6 ${isCrazy ? 'bg-black' : 'bg-[#ffff4d]'}`}>
             {messages.map((msg) => (
               <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
                 <div className={`
-                  max-w-[85%] p-4 border-4 border-black font-mono font-bold text-sm md:text-base hard-shadow-sm
-                  ${msg.sender === "user" 
-                    ? "bg-white text-black rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl" 
-                    : "bg-black text-[#ffff4d] rounded-tr-2xl rounded-bl-2xl rounded-br-2xl"}
+                  max-w-[85%] p-4 border-4 font-mono font-bold text-sm md:text-base
+                  ${isCrazy 
+                    ? (msg.sender === "user" ? 'bg-[#39ff14] text-black border-[#39ff14]' : 'bg-black text-[#ff00ff] border-[#ff00ff]') 
+                    : (msg.sender === "user" ? 'bg-white text-black border-black hard-shadow-sm' : 'bg-black text-[#ffff4d] border-black')
+                  }
+                  rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl
                 `}>
                   {msg.text}
                 </div>
@@ -363,7 +460,7 @@ export const LandingPage = () => {
 
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-black text-[#ffff4d] p-4 border-4 border-black rounded-tr-2xl rounded-bl-2xl rounded-br-2xl font-mono font-bold">
+                <div className={`p-4 border-4 rounded-tr-2xl rounded-bl-2xl rounded-br-2xl font-mono font-bold ${isCrazy ? 'bg-black text-[#00ffff] border-[#00ffff]' : 'bg-black text-[#ffff4d] border-black'}`}>
                   PROCESSING... <span className="animate-pulse">_</span>
                 </div>
               </div>
@@ -371,7 +468,7 @@ export const LandingPage = () => {
             <div ref={bottomRef} />
           </div>
 
-          <div className="p-6 bg-[#ffff4d] border-t-4 border-black">
+          <div className={`p-6 border-t-4 ${isCrazy ? 'bg-black border-[#ff00ff]' : 'bg-[#ffff4d] border-black'}`}>
             <div className="flex gap-2">
               <input
                 ref={inputRef}
@@ -380,12 +477,12 @@ export const LandingPage = () => {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleInputKeyDown}
                 placeholder="TYPE HERE..."
-                className="flex-1 bg-white border-4 border-black p-4 font-mono font-bold uppercase placeholder-gray-400 focus:outline-none focus:bg-[#f0f0f0]"
+                className={`flex-1 border-4 p-4 font-mono font-bold uppercase focus:outline-none ${isCrazy ? 'bg-black text-[#39ff14] border-[#39ff14] placeholder-[#39ff14]/50' : 'bg-white border-black text-black placeholder-gray-400'}`}
               />
               <button
                 onClick={handleSend}
                 disabled={isLoading}
-                className="bg-black text-[#ffff4d] px-6 border-4 border-black hover:bg-white hover:text-black transition-colors font-bold uppercase"
+                className={`px-6 border-4 font-bold uppercase transition-colors ${isCrazy ? 'bg-[#39ff14] text-black border-[#39ff14] hover:bg-white' : 'bg-black text-[#ffff4d] border-black hover:bg-white hover:text-black'}`}
               >
                 SEND
               </button>
