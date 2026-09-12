@@ -69,7 +69,7 @@ function makeLion() {
   return { lion, head, tail, eyes, pupils, mouth, whiskers, legs };
 }
 
-export function LionScene({ invite = false, onInvite }) {
+export function LionScene({ invite = false, onInvite, initialX = 0, modelScale = 1 }) {
   const bubble = useRef(null);
   const host = useRef(null);
   const [failed, setFailed] = useState(false);
@@ -103,6 +103,7 @@ export function LionScene({ invite = false, onInvite }) {
     ground.receiveShadow = true;
     scene.add(ground);
     const { lion, head, tail, eyes, pupils, mouth, whiskers, legs } = makeLion();
+    lion.scale.setScalar(modelScale);
     scene.add(lion);
     const fan = new THREE.Group();
     const blades = new THREE.Group();
@@ -124,6 +125,7 @@ export function LionScene({ invite = false, onInvite }) {
     const fanTarget = new THREE.Vector3();
     let held = false, strength = 0, frame, last = performance.now(), elapsed = 0;
     let gait = 0, pace = 0, visible = true;
+    let displayScale = modelScale;
     const destination = new THREE.Vector3();
     const bubblePosition = new THREE.Vector3();
     const visibility = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; });
@@ -132,6 +134,8 @@ export function LionScene({ invite = false, onInvite }) {
     function resize() {
       const width = container.clientWidth, height = container.clientHeight;
       renderer.setSize(width, height);
+      displayScale = width < 820 && modelScale < 1 ? modelScale * 0.62 : modelScale;
+      lion.scale.setScalar(displayScale);
       const aspect = width / height;
       const viewHeight = Math.max(8.8, 5.6 / aspect);
       camera.left = -viewHeight * aspect / 2; camera.right = viewHeight * aspect / 2;
@@ -139,6 +143,8 @@ export function LionScene({ invite = false, onInvite }) {
       camera.near = 0.1; camera.far = 100; camera.updateProjectionMatrix();
     }
     const observer = new ResizeObserver(resize); observer.observe(container); resize();
+    lion.position.x = Math.max(camera.left + 2.2 * displayScale, Math.min(camera.right - 2.2 * displayScale, initialX));
+    pointer.x = lion.position.x / Math.max(0.001, camera.right - 2.2 * displayScale);
     function move(event) {
       const rect = container.getBoundingClientRect();
       pointer.set((event.clientX - rect.left) / rect.width * 2 - 1, -((event.clientY - rect.top) / rect.height * 2 - 1));
@@ -170,7 +176,7 @@ export function LionScene({ invite = false, onInvite }) {
       const smooth = 1 - Math.exp(-7 * dt);
       if (!visible || document.hidden) { frame = requestAnimationFrame(render); return; }
       strength += ((held ? 1 : 0) - strength) * smooth;
-      if (!held) destination.set(pointer.x * Math.max(0, camera.right - 2.2), 0, -pointer.y * 0.9);
+      if (!held) destination.set(pointer.x * Math.max(0, camera.right - 2.2 * displayScale), 0, -pointer.y * 0.9);
       else destination.set(lion.position.x, 0, lion.position.z);
       const dx = destination.x - lion.position.x, dz = destination.z - lion.position.z;
       const distance = Math.hypot(dx, dz);
@@ -223,7 +229,7 @@ export function LionScene({ invite = false, onInvite }) {
       geometries.forEach(geometry => geometry.dispose()); materials.forEach(material => material.dispose());
       renderer.dispose(); renderer.domElement.remove();
     };
-  }, []);
+  }, [initialX, modelScale]);
   return <div className="lion-page">
     <div ref={host} className="lion-stage" tabIndex={0} role="application" aria-label="Interactive lion. Move your cursor or tap to guide him. Hold to use the fan. Keyboard: arrow keys to move, hold Space to fan, Escape to reset." />
     {invite && <Link ref={bubble} to="/ask" onClick={onInvite} className="lion-invitation" aria-label="Chat with Hemachandra’s AI assistant"><span>Hi, curious about me?</span><strong>Ask my AI ↗</strong></Link>}
