@@ -1,0 +1,6 @@
+.lion-page { position: relative; width: 100%; height: 100%; }
+.lion-stage { position: absolute; inset: 0; touch-action: pan-y; cursor: crosshair; outline: none; }
+.lion-stage:active { cursor: grabbing; }
+.lion-stage:focus-visible { outline: 1px dashed #89696b; outline-offset: -8px; }
+.lion-stage canvas { display: block; width: 100%; height: 100%; }
+.lion-error { position: absolute; top: 45%; left: 10%; right: 10%; text-align: center; color: #654252; font-size: 14px; }

@@ -1,0 +1,10 @@
+// Content from the existing portfolio and the public pinned GitHub repositories.
+export const projects = [
+  { title: 'Scout', category: 'AI research', description: 'A recursive research agent that explores questions and builds deeper answers.', tags: ['TypeScript', 'AI agents'], repo: 'Scout', motif: '01', detail: 'A little more curiosity.\nA lot more depth.' },
+  { title: 'Second Brain', category: 'Personal knowledge', description: 'Capture your notes. Find the connections. A personal knowledge system built around semantic search and vector embeddings.', tags: ['Next.js', 'FastAPI', 'Pinecone', 'PostgreSQL'], repo: 'second-brain', motif: '02', detail: 'Everything you know.\nConnected.' },
+  { title: 'SimpleWeb3', category: 'Web3 · fork / contribution', description: 'A focused interface for connecting wallets and sending Ethereum transactions. A fork of the Tools.SimpleWeb3 project.', tags: ['React', 'Tailwind CSS', 'Wagmi'], repo: 'tools.simpleweb3.ch', motif: '03', detail: 'Less friction.\nMore possibility.' },
+  { title: 'PDF RAG Assistant', category: 'Document intelligence', description: 'Upload a PDF and ask questions about its contents with retrieval-augmented generation.', tags: ['Python', 'Streamlit', 'RAG'], repo: 'Pdf-Rag-Assistant', motif: '04', detail: 'Read between\nthe lines.' },
+  { title: 'CogniTalk', category: 'Conversational AI', description: 'A chat interface with local models, saved conversations, and automatically generated titles.', tags: ['Python', 'Streamlit', 'Ollama'], repo: 'CogniTalk', motif: '05', detail: 'A thought.\nA conversation.' },
+  { title: 'Fraud Detection', category: 'Machine learning', description: 'A transaction analysis pipeline using feature engineering and supervised learning to flag suspicious credit card activity.', tags: ['Python', 'Pandas', 'Scikit-learn'], repo: 'Credit-Card-Fraud-detection', motif: '06', detail: 'Find the signal.\nSee the exception.' },
+];
+export const sections = [['home', 'Home'], ['work', 'Work'], ['about', 'About'], ['experience', 'Experience'], ['journal', 'Journal'], ['contact', 'Contact']];
