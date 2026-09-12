@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowUpRight, ArrowDown, ArrowLeft, ArrowRight, Grid2X2, X } from 'lucide-react';
 import { LionScene } from '../components/LionScene';
 import { projects, sections } from '../data/portfolio';
@@ -9,6 +10,7 @@ const github = 'https://github.com/Hemachandra9899';
 function External({ href, children, ...props }) { return <a href={href} target="_blank" rel="noreferrer" {...props}>{children}<ArrowUpRight size={16} aria-hidden="true" /></a>; }
 
 export function Portfolio({ initialSection = 'home' }) {
+  const routeNavigate = useNavigate();
   const [active, setActive] = useState(initialSection);
   const [menu, setMenu] = useState(false);
   const dialog = useRef(null);
@@ -37,6 +39,15 @@ export function Portfolio({ initialSection = 'home' }) {
     window.history.replaceState(null, '', `#${id}`);
     setActive(id);
   }
+  function openAssistant(event) {
+    event.preventDefault();
+    const go = () => routeNavigate('/ask');
+    if (document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.startViewTransition(go);
+    } else {
+      go();
+    }
+  }
   const currentIndex = sections.findIndex(([id]) => id === active);
   return <div className="portfolio" ref={site}>
     <a className="skip-link" href="#work">Skip to projects</a>
@@ -44,7 +55,7 @@ export function Portfolio({ initialSection = 'home' }) {
     <main>
       <section id="home" data-section className="hero">
         <div className="hero-name"><p>A LITTLE LOGIC. A LITTLE CURIOSITY.</p><h1>Hemachandra Reddy</h1></div>
-        <div className="hero-lion"><LionScene /></div>
+        <div className="hero-lion"><LionScene invite onInvite={openAssistant} /></div>
         <div className="hero-bottom"><p>I build thoughtful software.<br />From intelligent systems to the little details.</p><a href="#work">SCROLL TO EXPLORE <ArrowDown size={16} /></a></div>
       </section>
       <section id="work" data-section className="work-section section-pad">

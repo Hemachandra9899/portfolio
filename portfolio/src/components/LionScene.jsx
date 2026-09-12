@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { Link } from 'react-router-dom';
 import './LionScene.css';
 
 // All geometry is built locally: no model downloads or loading screen.
@@ -68,7 +69,8 @@ function makeLion() {
   return { lion, head, tail, eyes, pupils, mouth, whiskers, legs };
 }
 
-export function LionScene() {
+export function LionScene({ invite = false, onInvite }) {
+  const bubble = useRef(null);
   const host = useRef(null);
   const [failed, setFailed] = useState(false);
   useEffect(() => {
@@ -123,6 +125,7 @@ export function LionScene() {
     let held = false, strength = 0, frame, last = performance.now(), elapsed = 0;
     let gait = 0, pace = 0, visible = true;
     const destination = new THREE.Vector3();
+    const bubblePosition = new THREE.Vector3();
     const visibility = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; });
     visibility.observe(container);
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -198,6 +201,13 @@ export function LionScene() {
       ray.setFromCamera(pointer, camera); ray.ray.intersectPlane(fanPlane, fanTarget);
       fan.position.lerp(fanTarget, smooth); fan.scale.setScalar(0.6 + strength * 0.25);
       blades.rotation.z -= dt * (9 + strength * 30) * motion;
+      if (bubble.current) {
+        bubblePosition.set(lion.position.x + 1.7, lion.position.y + 4.65, lion.position.z).project(camera);
+        const x = Math.max(90, Math.min(container.clientWidth - 90, (bubblePosition.x + 1) / 2 * container.clientWidth));
+        const y = Math.max(16, (1 - bubblePosition.y) / 2 * container.clientHeight);
+        bubble.current.style.left = `${x}px`;
+        bubble.current.style.top = `${y}px`;
+      }
       renderer.render(scene, camera);
       frame = requestAnimationFrame(render);
     }
@@ -216,6 +226,7 @@ export function LionScene() {
   }, []);
   return <div className="lion-page">
     <div ref={host} className="lion-stage" tabIndex={0} role="application" aria-label="Interactive lion. Move your cursor or tap to guide him. Hold to use the fan. Keyboard: arrow keys to move, hold Space to fan, Escape to reset." />
+    {invite && <Link ref={bubble} to="/ask" onClick={onInvite} className="lion-invitation" aria-label="Chat with Hemachandra’s AI assistant"><span>Hi, curious about me?</span><strong>Ask my AI ↗</strong></Link>}
     {failed && <p className="lion-error">Our little companion needs WebGL to appear. You can still explore all my work below.</p>}
   </div>;
 }

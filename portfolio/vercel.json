@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/getnotes", "destination": "https://portfolio-bacckend.onrender.com/api/getnotes" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}
