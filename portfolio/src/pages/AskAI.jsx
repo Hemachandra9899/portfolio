@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Markdown from 'react-markdown';
-import { ArrowLeft, ArrowUpRight, ArrowUp, ArrowDown, Square, RotateCcw, Plus, FileText, Download, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, ArrowUp, ArrowDown, Square, RotateCcw, Plus, FileText, Download, Sparkles, Copy, Check } from 'lucide-react';
 import { LionScene } from '../components/LionScene';
 import './Portfolio.css';
 import './AskAI.css';
@@ -26,6 +26,22 @@ function ResponseCards({ data }) {
   if (data.cardType === 'skills' && data.skills) return <div className="skill-resources">{Object.entries(data.skills).filter(([, v]) => Array.isArray(v)).map(([k, v]) => <article key={k}><h3>{k.replace(/([A-Z])/g, ' $1')}</h3><Tags items={v} /></article>)}</div>;
   if (data.cardType === 'contact' && data.socialLinks) return <div className="contact-resources">{Object.entries(data.socialLinks).map(([k, v]) => <ResourceLink key={k} href={k === 'email' ? 'mailto:' + v : k === 'phone' ? 'tel:' + v : v}><span>{k}</span>{v}<ArrowUpRight size={16} /></ResourceLink>)}</div>;
   return null;
+}
+function ChatMessage({ message }) {
+  const [copied, setCopied] = useState(false);
+  async function copyAnswer() {
+    try {
+      await navigator.clipboard.writeText(message.text);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch { setCopied(false); }
+  }
+  return <article className={'chat-message ' + message.role}>
+    {message.role === 'assistant' && <div className="answer-label"><img src="/monogram.svg" width="20" height="20" alt="" /><span>Hemachandra’s assistant</span><i>AI</i></div>}
+    <div className="message-content">{message.role === 'user' ? <p>{message.text}</p> : <Markdown urlTransform={safeUrl} components={{ a: ({ href, children }) => <ResourceLink href={href}>{children}</ResourceLink> }}>{message.text}</Markdown>}</div>
+    <ResponseCards data={message.data} />
+    {message.role === 'assistant' && <footer className="message-actions"><button onClick={copyAnswer} aria-label={copied ? 'Answer copied' : 'Copy answer'}>{copied ? <Check size={14} /> : <Copy size={14} />}{copied ? 'Copied' : 'Copy'}</button></footer>}
+  </article>;
 }
 export function AskAI() {
   const navigate = useNavigate();
@@ -55,7 +71,7 @@ export function AskAI() {
     const controller = new AbortController(); request.current = controller;
     const timeout = window.setTimeout(() => controller.abort('timeout'), 90000);
     try {
-      const response = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: controller.signal, body: JSON.stringify({ message: question, history: history.slice(-12).map(m => ({ role: m.role, content: m.text })) }) });
+      const response = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: controller.signal, body: JSON.stringify({ message: question, history: history.slice(-6).map(m => ({ role: m.role, content: m.text })) }) });
       if (!response.ok) throw new Error('unavailable');
       const data = await response.json();
       if (data.success === false || typeof data.answer !== 'string' || !data.answer.trim()) throw new Error('invalid response');
@@ -72,8 +88,8 @@ export function AskAI() {
         <div className="chat-toolbar"><span><span className="status-dot" /> A little context. A better conversation.</span><button onClick={reset}><Plus size={16} /> New chat</button></div>
         <div className="chat-scroll" ref={conversation} onScroll={onScroll} tabIndex={0} aria-label="Scrollable conversation">
           {!messages.length && <div className="chat-welcome"><span className="welcome-symbol"><Sparkles size={25} /></span><span className="eyebrow">MEET THE PERSON BEHIND THE WORK</span><h1>A little curiosity<br />goes a <em>long way.</em></h1><p>Ask about my projects, the problems I solve,<br className="desktop-break" /> or where I could fit into your team.</p><div className="chat-suggestions">{suggestions.map(([label, prompt]) => <button key={label} onClick={() => send(prompt)}><span>{label}</span><ArrowUpRight size={17} /></button>)}</div></div>}
-          <div className="chat-messages" role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions">{messages.map(m => <article key={m.id} className={'chat-message ' + m.role}>{m.role === 'assistant' && <div className="answer-label"><img src="/monogram.svg" width="20" height="20" alt="" />Hemachandra’s assistant</div>}<div className="message-content">{m.role === 'user' ? <p>{m.text}</p> : <Markdown urlTransform={safeUrl} components={{ a: ({ href, children }) => <ResourceLink href={href}>{children}</ResourceLink> }}>{m.text}</Markdown>}</div><ResponseCards data={m.data} /></article>)}</div>
-          {pending && <div className="thinking" role="status"><Sparkles size={17} /><span>Finding the details</span><i /><i /><i /></div>}
+          <div className="chat-messages" role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions">{messages.map(message => <ChatMessage message={message} key={message.id} />)}</div>
+          {pending && <div className="thinking" role="status"><Sparkles size={17} /><span>Thinking with the conversation</span><i /><i /><i /></div>}
           {error && <div className="chat-error" role="alert"><p>{error}</p><button onClick={() => send(retryPrompt.current, true)}><RotateCcw size={14} /> Try again</button></div>}
         </div>
         <div className="chat-composer">{showLatest && <button className="latest-message" onClick={latest}><ArrowDown size={14} /> Latest messages</button>}<form onSubmit={event => { event.preventDefault(); send(draft); }}><label className="sr-only" htmlFor="question">Your question</label><textarea ref={input} id="question" value={draft} maxLength={2000} onChange={event => setDraft(event.target.value)} placeholder="Ask something about Hemachandra…" rows={2} onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); send(draft); } }} /><div className="composer-bottom"><span>Projects, experience, résumé & more</span>{pending ? <button className="send-button" type="button" onClick={() => request.current?.abort('stopped')} aria-label="Stop response"><Square size={15} /></button> : <button className="send-button" type="submit" disabled={!draft.trim()} aria-label="Send question"><ArrowUp size={19} /></button>}</div></form><p>AI can make mistakes. <a href="mailto:pottingari@gmail.com">Ask Hemachandra directly ↗</a></p></div>
