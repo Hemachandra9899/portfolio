@@ -1,10 +1,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Portfolio } from './pages/Portfolio';
 import './index.css';
+import { RouteMetadata } from './components/RouteMetadata';
 import { AskAI } from './pages/AskAI';
 
 export default function App() {
-  return <BrowserRouter><Routes>
+  return <BrowserRouter><RouteMetadata /><Routes>
     <Route path="/ask" element={<AskAI />} />
     <Route path="/" element={<Portfolio />} />
     <Route path="/about" element={<Portfolio initialSection="about" />} />

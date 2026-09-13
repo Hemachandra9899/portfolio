@@ -1,6 +1,17 @@
 {
+  "redirects": [
+    { "source": "/about", "destination": "/#about", "permanent": true },
+    { "source": "/work", "destination": "/#work", "permanent": true },
+    { "source": "/contact", "destination": "/#contact", "permanent": true },
+    { "source": "/blogs", "destination": "/#journal", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/api/getnotes", "destination": "https://portfolio-bacckend.onrender.com/api/getnotes" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/ask", "destination": "/ask/index.html" }
+  ],
+  "headers": [
+    { "source": "/ask", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, follow" }] },
+    { "source": "/robots.txt", "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }] },
+    { "source": "/sitemap.xml", "headers": [{ "key": "Content-Type", "value": "application/xml; charset=utf-8" }] }
   ]
 }
