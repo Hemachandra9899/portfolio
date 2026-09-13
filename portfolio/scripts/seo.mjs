@@ -50,7 +50,7 @@ await writeFile('dist/index.html', page());
 await mkdir('dist/ask', { recursive: true });
 await writeFile('dist/ask/index.html', page(true));
 await writeFile('dist/robots.txt', `User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: ${origin}/sitemap.xml\n`);
-await writeFile('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${preview ? '' : `  <url><loc>${origin}/</loc></url>\n`}</urlset>\n`);
+await writeFile('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${preview ? '' : `  <url><loc>${origin}/</loc></url>\n`}</urlset>\n`);
 await writeFile('dist/llms.txt', `# ${name}\n\n> ${description}\n\n## Portfolio\n- [Profile and experience](${origin}/): Biography, skills, experience, and contact links.\n\n## Projects\n${projects.map(p => `- [${p.title}](https://github.com/Hemachandra9899/${p.repo}): ${p.description}`).join('\n')}\n\nThis is a public portfolio summary. For current facts, use the linked portfolio and repositories.\n`);
 console.log(`Generated crawlable portfolio, canonical, JSON-LD, sitemap and robots for ${origin}`);
 
