@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, ArrowDown, ArrowLeft, ArrowRight, Grid2X2, X } from 'lucide-react';
 import { LionScene } from '../components/LionScene';
 import { projects, sections } from '../data/portfolio';
@@ -51,19 +51,28 @@ export function Portfolio({ initialSection = 'home' }) {
   const currentIndex = sections.findIndex(([id]) => id === active);
   return <div className="portfolio" ref={site}>
     <a className="skip-link" href="#work">Skip to projects</a>
-    <header className="masthead"><a href="#home" onClick={event => { event.preventDefault(); navigate('home'); }} className="monogram" aria-label="Hemachandra Reddy, home"><img src="/monogram.svg" alt="" width="36" height="36" /></a><span>SOFTWARE ENGINEER <span className="masthead-divider">/</span> HYDERABAD, IN</span><a href="mailto:pottingari@gmail.com">Let’s talk <ArrowUpRight size={14} /></a></header>
+    <header className="masthead"><a href="#home" onClick={event => { event.preventDefault(); navigate('home'); }} className="monogram" aria-label="Hemachandra Reddy, home"><img src="/monogram.svg" alt="" width="36" height="36" /></a><span>AI &amp; DATA ENGINEER <span className="masthead-divider">/</span> HYDERABAD, INDIA</span><a href="mailto:pottingari@gmail.com">Let’s talk <ArrowUpRight size={14} /></a></header>
     <main>
       <section id="home" data-section className="hero">
-        <div className="hero-name"><p>A LITTLE LOGIC. A LITTLE CURIOSITY.</p><h1>Hemachandra Reddy</h1></div>
+        <div className="hero-name"><p>AI ENGINEER PORTFOLIO · HYDERABAD, INDIA</p><h1>Hemachandra Reddy<span>AI &amp; Data Engineer</span></h1></div>
         <div className="hero-lion"><LionScene invite onInvite={openAssistant} /></div>
         <div className="hero-bottom"><p>AI &amp; Data Engineer in Hyderabad.<br />I build thoughtful, reliable software.</p><a href="#work">SCROLL TO EXPLORE <ArrowDown size={16} /></a></div>
+      </section>
+      <section className="ai-focus section-pad" aria-labelledby="ai-focus-title">
+        <span className="eyebrow">AI ENGINEERING / HYDERABAD</span>
+        <div className="ai-focus-intro" data-reveal><h2 id="ai-focus-title">Building useful AI,<br /><em>end to end.</em></h2><p>I’m an AI and Data Engineer in Hyderabad building production-minded AI applications: research agents, retrieval-augmented generation systems, document intelligence, data pipelines, and the interfaces that make them usable.</p></div>
+        <div className="ai-capabilities" data-reveal>
+          <article><span>01</span><h3>AI agents &amp; LLM applications</h3><p>Designing contextual assistants, recursive research workflows, prompt systems, and reliable language-model integrations.</p></article>
+          <article><span>02</span><h3>RAG &amp; knowledge systems</h3><p>Connecting embeddings, vector databases, semantic retrieval, and grounded answers for documents and personal knowledge.</p></article>
+          <article><span>03</span><h3>Data &amp; product engineering</h3><p>Shipping Python and FastAPI services, PostgreSQL data systems, automation pipelines, and responsive React and Next.js experiences.</p></article>
+        </div>
       </section>
       <section id="work" data-section className="work-section section-pad">
         <div className="section-heading" data-reveal><span className="eyebrow">01 / SELECTED WORK</span><div><h2>Things I’ve<br /><em>put into the world.</em></h2><p>A collection of ideas, experiments, and things built to be useful.</p></div><span className="project-count">(06)</span></div>
         <div className="project-stack">
           {projects.map((project, index) => <article className={`project-card project-${index}`} style={{ '--card-index': index }} key={project.repo}>
             <div className="project-inner" data-reveal>
-              <div className="project-info"><div className="project-meta"><span>{project.motif} / 06</span><span>{project.category}</span></div><div><h3>{project.title}</h3><p>{project.description}</p><ul className="tags">{project.tags.map(tag => <li key={tag}>{tag}</li>)}</ul></div><External href={`${github}/${project.repo}`} className="project-link">Explore project</External></div>
+              <div className="project-info"><div className="project-meta"><span>{project.motif} / 06</span><span>{project.category}</span></div><div><h3>{project.title}</h3><p>{project.description}</p><ul className="tags">{project.tags.map(tag => <li key={tag}>{tag}</li>)}</ul></div><div className="project-actions"><Link to={`/projects/${project.slug}`} className="project-link">Read case study <ArrowUpRight size={16} aria-hidden="true" /></Link><External href={`${github}/${project.repo}`} className="project-repo">GitHub</External></div></div>
               <div className="project-type-art" aria-hidden="true"><span className="art-label">{project.category.split(' · ')[0]} / {project.motif}</span><span className="art-number">{project.motif}</span><p>{project.detail}</p><span className="art-footer">HEMACHANDRA REDDY <span>↗</span></span></div>
             </div>
           </article>)}
@@ -72,7 +81,7 @@ export function Portfolio({ initialSection = 'home' }) {
       </section>
       <section id="about" data-section className="about-section section-pad">
         <span className="eyebrow">02 / THE PERSON BEHIND THE CODE</span>
-        <div className="about-grid"><h2 data-reveal>Curious by nature.<br /><em>Engineer by choice.</em></h2><div data-reveal><p className="about-lead">I’m Hemachandra, a software engineer in Hyderabad, India. I enjoy turning complicated problems into reliable, thoughtful products.</p><p>My work spans REST APIs, databases, microservices, and React interfaces. Lately, I’m exploring how AI can make everyday tools more useful.</p><p>Outside the editor, you’ll find me with a camera, noticing quiet corners, or working through a problem on LeetCode.</p><External href="https://leetcode.com/u/Hemachandra9899/" className="text-link">A little daily problem solving</External></div></div>
+        <div className="about-grid"><h2 data-reveal>Curious by nature.<br /><em>Engineer by choice.</em></h2><div data-reveal><p className="about-lead">I’m Hemachandra, an AI and Data Engineer based in Hyderabad, India. I turn complicated problems into reliable, thoughtful products.</p><p>My work spans AI agents, RAG applications, REST APIs, databases, data pipelines, microservices, and React interfaces.</p><p>Outside the editor, you’ll find me with a camera, noticing quiet corners, or working through a problem on LeetCode.</p><External href="https://leetcode.com/u/Hemachandra9899/" className="text-link">A little daily problem solving</External></div></div>
         <div className="skills-grid" data-reveal><h3>The toolkit</h3><div><span>LANGUAGES</span><p>Python · Rust · C++ · JavaScript</p></div><div><span>PRODUCT & DATA</span><p>React · Next.js · Node.js · FastAPI<br />PostgreSQL · MongoDB · MySQL · Kafka</p></div><div><span>TOOLS & SYSTEMS</span><p>Docker · Microservices<br />GitHub Actions · Figma</p></div></div>
       </section>
       <section id="experience" data-section className="experience-section section-pad"><span className="eyebrow">03 / ALONG THE WAY</span><h2 data-reveal>Always <em>building.</em></h2>
