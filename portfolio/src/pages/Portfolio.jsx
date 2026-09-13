@@ -56,7 +56,7 @@ export function Portfolio({ initialSection = 'home' }) {
       <section id="home" data-section className="hero">
         <div className="hero-name"><p>A LITTLE LOGIC. A LITTLE CURIOSITY.</p><h1>Hemachandra Reddy</h1></div>
         <div className="hero-lion"><LionScene invite onInvite={openAssistant} /></div>
-        <div className="hero-bottom"><p>I build thoughtful software.<br />From intelligent systems to the little details.</p><a href="#work">SCROLL TO EXPLORE <ArrowDown size={16} /></a></div>
+        <div className="hero-bottom"><p>AI &amp; Data Engineer in Hyderabad.<br />I build thoughtful, reliable software.</p><a href="#work">SCROLL TO EXPLORE <ArrowDown size={16} /></a></div>
       </section>
       <section id="work" data-section className="work-section section-pad">
         <div className="section-heading" data-reveal><span className="eyebrow">01 / SELECTED WORK</span><div><h2>Things I’ve<br /><em>put into the world.</em></h2><p>A collection of ideas, experiments, and things built to be useful.</p></div><span className="project-count">(06)</span></div>
